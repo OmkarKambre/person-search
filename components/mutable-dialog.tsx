@@ -31,6 +31,7 @@ interface GenericDialogProps<T extends FieldValues> {
   dialogDescription?: string;
   submitButtonLabel?: string;
   defaultValues?: DefaultValues<T>; // If present, this will indicate edit mode
+  onEdit?: (data: T) => Promise<void>;
 }
 
 export default function MutableDialog<T extends FieldValues>({
@@ -43,6 +44,7 @@ export default function MutableDialog<T extends FieldValues>({
   editDialogTitle = 'Edit',
   dialogDescription = defaultValues ? 'Make changes to your item here. Click save when you\'re done.' : 'Fill out the form below to add a new item.',
   submitButtonLabel = defaultValues ? 'Save' : 'Add',
+  onEdit,
 }: GenericDialogProps<T>) {
   const [open, setOpen] = useState(false);
 
@@ -76,6 +78,10 @@ export default function MutableDialog<T extends FieldValues>({
 
     console.log('calling submit');
     const actions = await action(data);  // Call the provided action directly
+
+    if (actions.success && onEdit) {
+      await onEdit(data); // Call onEdit if provided
+    }
 
     console.log('actions:', actions);
 

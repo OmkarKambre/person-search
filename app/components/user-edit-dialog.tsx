@@ -1,9 +1,11 @@
 'use client'
 
+import React from 'react'
 import { updateUser } from '@/app/actions/actions'
 import { userFormSchema, User, UserFormData } from '@/app/actions/schemas'
 import { UserForm } from './user-form'
 import MutableDialog, { ActionState } from '@/components/mutable-dialog'
+import { revalidatePath } from 'next/cache'
 
 interface UserEditDialogProps {
   user: User
@@ -39,6 +41,10 @@ export function UserEditDialog({ user }: UserEditDialogProps) {
         name: user.name,
         email: user.email,
         phoneNumber: user.phoneNumber,
+      }}
+      onEdit={async (updatedPerson) => {
+        await updateUser(user.id, updatedPerson); // Update the user details
+        revalidatePath("/"); // Revalidate the path to refresh the displayed card
       }}
     />
   )
