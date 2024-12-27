@@ -79,20 +79,14 @@ export default function MutableDialog<T extends FieldValues>({
     console.log('calling submit');
     const actions = await action(data);  // Call the provided action directly
 
-    if (actions.success && onEdit) {
-      await onEdit(data); // Call onEdit if provided
-    }
-
-    console.log('actions:', actions);
-
     if (actions.success) {
       const toastMessage = actions.message;
       toast.success(toastMessage);
+      setOpen(false); // Close the dialog on success
     } else {
       const toastMessage = actions.message;
       toast.error(toastMessage);
     }
-    setOpen(false);
   }
 
   return (
