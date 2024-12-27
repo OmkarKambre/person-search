@@ -38,13 +38,13 @@ export function UserEditDialog({ user }: UserEditDialogProps) {
       dialogDescription={`Update the details of ${user.name} below.`}
       submitButtonLabel="Save Changes"
       defaultValues={{
-        name: user.name,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
+        name: "Enter Username",
+        email: "Enter Email",
+        phoneNumber: "Enter Phone number",
       }}
       onEdit={async (updatedPerson) => {
-        await updateUser(user.id, updatedPerson); // Update the user details
-        revalidatePath("/"); // Revalidate the path to refresh the displayed card
+        await updateUser(user.id, updatedPerson)
+        revalidatePath("/")
       }}
     />
   )

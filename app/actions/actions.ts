@@ -47,7 +47,7 @@ export async function updateUser(id: string, data: Partial<Omit<User, 'id'>>): P
 
     const existingUser = users[index]
     const updatedUser = { ...existingUser, ...data }
-    const validatedUser = userSchema.parse(updatedUser) // Ensure the updated data adheres to schema
+    const validatedUser = userSchema.parse(updatedUser)
 
     users[index] = validatedUser
     console.log(`User with id ${id} has been updated.`)
