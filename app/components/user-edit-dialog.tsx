@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { updateUser } from '@/app/actions/actions'
 import { userFormSchema, User, UserFormData } from '@/app/actions/schemas'
 import { UserForm } from './user-form'
@@ -12,9 +12,12 @@ interface UserEditDialogProps {
 }
 
 export function UserEditDialog({ user }: UserEditDialogProps) {
+  const [currentUser, setCurrentUser] = useState(user)
+
   const handleEditUser = async (data: UserFormData): Promise<ActionState<User>> => {
     try {
-      const updatedUser = await updateUser(user.id, data)
+      const updatedUser = await updateUser(currentUser.id, data)
+      setCurrentUser(updatedUser)
       return {
         success: true,
         message: `User ${updatedUser.name} updated successfully`,
@@ -28,22 +31,28 @@ export function UserEditDialog({ user }: UserEditDialogProps) {
     }
   }
 
+  useEffect(() => {
+    setCurrentUser(user);
+  }, [user]);
+
   return (
     <MutableDialog<UserFormData>
+      key={currentUser.id}
       formSchema={userFormSchema}
       FormComponent={UserForm}
       action={handleEditUser}
       triggerButtonLabel="Edit"
-      editDialogTitle={`Edit ${user.name}`}
-      dialogDescription={`Update the details of ${user.name} below.`}
+      editDialogTitle={`Edit ${currentUser.name}`}
+      dialogDescription={`Update the details of ${currentUser.name} below.`}
       submitButtonLabel="Save Changes"
       defaultValues={{
-        name: "Enter Username",
-        email: "Enter Email",
-        phoneNumber: "Enter Phone number",
+        name: currentUser.name,
+        email: currentUser.email,
+        phoneNumber: currentUser.phoneNumber,
       }}
       onEdit={async (updatedPerson) => {
-        await updateUser(user.id, updatedPerson)
+        const updatedUser = await updateUser(currentUser.id, updatedPerson)
+        setCurrentUser(updatedUser)
         revalidatePath("/")
       }}
     />

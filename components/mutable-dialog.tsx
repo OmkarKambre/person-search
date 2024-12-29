@@ -67,8 +67,10 @@ export default function MutableDialog<T extends FieldValues>({
   useEffect(() => {
     if (!open) {
       form.reset();
+    } else {
+      form.reset(defaultValues); // Reset with new default values when opened
     }
-  }, [open, form]);
+  }, [open, defaultValues, form]);
 
   async function handleSubmit(data: T) {
     if (!action) {
