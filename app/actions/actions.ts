@@ -2,7 +2,6 @@
 
 import { revalidatePath } from 'next/cache'
 import { User, userSchema } from './schemas'
-import { v4 as uuidv4 } from 'uuid'
 
 const users: User[] = [
     { id: '1', name: 'John Doe', phoneNumber: '0412345678', email: 'john@example.com' },
