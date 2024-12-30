@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { User, userSchema } from './schemas'
+import { v4 as uuidv4 } from 'uuid'
 
 const users: User[] = [
     { id: '1', name: 'John Doe', phoneNumber: '0412345678', email: 'john@example.com' },
@@ -16,14 +17,16 @@ const users: User[] = [
     { id: '10', name: 'Isabella Young', phoneNumber: '0401234567', email: 'isabella@example.com' },
 ]
 
+let sequentialIdCounter = users.length + 1;
+
 export async function searchUsers(query: string): Promise<User[]> {
     console.log('Searching users with query:', query)
     return users.filter(user => user.name.toLowerCase().startsWith(query.toLowerCase()))
 }
 
 export async function addUser(data: Omit<User, 'id'>): Promise<User> {
-    const newId = (users.length + 1).toString()
-    const newUser = { ...data, id: newId }
+    const newUser = { ...data, id: sequentialIdCounter.toString() }
+    sequentialIdCounter++;
     const validatedUser = userSchema.parse(newUser)
     users.push(validatedUser)
     return validatedUser
