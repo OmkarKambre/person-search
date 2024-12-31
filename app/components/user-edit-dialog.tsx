@@ -5,7 +5,6 @@ import { updateUser } from '@/app/actions/actions'
 import { userFormSchema, User, UserFormData } from '@/app/actions/schemas'
 import { UserForm } from './user-form'
 import MutableDialog, { ActionState } from '@/components/mutable-dialog'
-import { revalidatePath } from 'next/cache'
 
 interface UserEditDialogProps {
   user: User
@@ -49,11 +48,6 @@ export function UserEditDialog({ user }: UserEditDialogProps) {
         name: currentUser.name,
         email: currentUser.email,
         phoneNumber: currentUser.phoneNumber,
-      }}
-      onEdit={async (updatedPerson) => {
-        const updatedUser = await updateUser(currentUser.id, updatedPerson)
-        setCurrentUser(updatedUser)
-        revalidatePath("/")
       }}
     />
   )
